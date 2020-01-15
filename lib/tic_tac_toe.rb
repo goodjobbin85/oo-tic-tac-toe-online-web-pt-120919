@@ -1,3 +1,5 @@
+require 'pry'
+
 class TicTacToe 
   
   WIN_COMBINATIONS = [
@@ -79,11 +81,14 @@ class TicTacToe
     end
   end 
      
-     def won? 
-       TicTacToe::WIN_COMBINATIONS.detect do |winner| 
-         @board[winner[0]] == @board[winner[1]] && 
-         @board[winner[1]] == @board[winner[2]] 
-       end
+     def won?
+       
+       WIN_COMBINATIONS.any? do |winner| 
+         if position_taken?(winner[0]) && @board[winner[0]] == @board[winner[1]] && @board[winner[1]] == @board[winner[2]]  
+           return winner 
+         end
+       end 
+       
      end 
      
      def full? 
@@ -102,32 +107,20 @@ class TicTacToe
      end 
      
      def over? 
-       won? || full?
+       won? || draw?
      end 
     
      def winner 
-       if winning_position = won? 
-         @winner = @board[winning_position.first] 
-       else 
-         nil
+       if won? 
+           @board[won?.first] 
        end
      end 
      
      
      def play
-        until over?
-          turn 
-          draw?
+        turn until over?
+          puts winner ? "Congratulations #{winner}!" : "Cat's Game!"
         end
-        if won?
-          puts "Congratulations #{winner}!"
-        elsif draw?
-          puts "Cat's Game!"
-        else
-        
-        end
-    
-      end
      end
      
 
